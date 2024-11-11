@@ -1,4 +1,5 @@
 downtimeTrackerUI <- function(id) {
+ 
   ns <- NS(id)
   
   sidebarLayout(
@@ -20,7 +21,7 @@ downtimeTrackerUI <- function(id) {
     fluidRow(
       box(
         title = "Status Breakdown of Issues",
-        status = "gray",
+        status = "info",
         solidHeader = TRUE,
         width = 12,
         height = "500px",
@@ -29,8 +30,18 @@ downtimeTrackerUI <- function(id) {
     ),
     fluidRow(
       box(
+        title = "Average Downtime by Issue",
+        status = "info",
+        solidHeader = TRUE,
+        width = 12,
+        height = "500px",
+        plotlyOutput(ns("avgDowntimeByIssue")) %>% withSpinner(type = 6)
+      )
+    ),
+    fluidRow(
+      box(
         title = "Distribution of Issues",
-        status = "gray",
+        status = "info",
         solidHeader = TRUE,
         width = 12,
         height = "500px",
@@ -40,23 +51,13 @@ downtimeTrackerUI <- function(id) {
     fluidRow(
       box(
         title = "Distribution of Causes for the Issues",
-        status = "gray",
+        status = "info",
         solidHeader = TRUE,
         width = 12,
         height = "500px",
         plotlyOutput(ns("funnelPlot")) %>% withSpinner(type = 6)
       )
-    ),
-    fluidRow(
-      box(
-        title = "Average Downtime by Issue",
-        status = "gray",
-        solidHeader = TRUE,
-        width = 12,
-        height = "500px",
-        plotlyOutput(ns("avgDowntimeByIssue")) %>% withSpinner(type = 6)
-      )
-    )     
+    )   
     )
       )
     )
