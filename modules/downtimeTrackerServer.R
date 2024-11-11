@@ -4,11 +4,13 @@ downtimeTrackerServer <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     
   observe({
-    month_choices <- data$Month[!is.na(data$Month)] %>% unique()
+    # Define month order
+    month_choices <- data$Month[!is.na(data$Month)] %>% unique() %>% factor(levels = month.name)
+    month_choices <- levels(month_choices)
     month_choices <- c("All" = "All", month_choices)
     quarter_choices <- data$Quarter[!is.na(data$Quarter)] %>% unique()
     quarter_choices <- c("All" = "All", quarter_choices)
-    year_choices <- data$Year[!is.na(data$Year)] %>% unique()
+    year_choices <- data$Year[!is.na(data$Year)] %>% unique() %>% sort()
     year_choices <- c("All" = "All", year_choices)
 
     updateSelectInput(session, "month", choices = month_choices, selected = "All")
@@ -22,19 +24,15 @@ downtimeTrackerServer <- function(id, data) {
     filtered_data <- reactive({
       req(data)
       filtered <- data
-      
       if (input$month != "All") {
         filtered <- filtered %>% filter(Month == input$month)
       }
-      
       if (input$quarter != "All") {
         filtered <- filtered %>% filter(Quarter == input$quarter)
       }
-      
       if (input$year != "All") {
         filtered <- filtered %>% filter(Year == as.numeric(input$year))
       }
-      
       filtered
     })
 
@@ -82,7 +80,7 @@ downtimeTrackerServer <- function(id, data) {
 
 
 # The plots-------------------------------------------------------------------------------------------------------------
-    custom_colors_status <- c("#17a2b8", "#008b8b")  # Blue for resolved, red for unresolved
+    custom_colors_status <- c("#5f9ea0", "#0000cd")  # Blue for resolved, red for unresolved
     output$statusBreakdown <- renderPlotly({
       data <- filtered_data()  # Load the necessary issues data
       # Filter out rows where Status might be NA
@@ -130,7 +128,7 @@ output$distributionOfIssues <- renderPlotly({
       marker = list(color = '#48d1cc')
     ) %>%
       layout(
-        title = "Distribution of Issues",
+        title = "",
         yaxis = list(title = 'Issue Type', automargin = TRUE, tickfont = list(size = 10),
                      categoryorder = 'total ascending'),  # Ensure categories are ordered by totals
         xaxis = list(title = 'Number of Issues', title_standoff = 20, tickformat = ',.0f'),
@@ -144,43 +142,35 @@ output$distributionOfIssues <- renderPlotly({
 
 
 output$avgDowntimeByIssue <- renderPlotly({
-    req(filtered_data())  # Ensure data is available before proceeding
-    
+    req(filtered_data()) 
     # Convert the Downtime column to numeric for averaging
     data <- filtered_data()
     data$Downtime <- as.numeric(as.character(data$`Downtime (Resolution Time)`))
     data$Issue <- factor(data$Issue, levels = unique(data$Issue))  
-    
     # Aggregate data by 'Issue' and calculate average downtime
     aggregated_data <- aggregate(Downtime ~ Issue, data = data, FUN = function(x) mean(x, na.rm = TRUE))
-
     # Rename the column for average downtime
     colnames(aggregated_data)[2] <- "AvgDowntime"
-
     # Filter out rows where AvgDowntime is greater than 0
     aggregated_data <- subset(aggregated_data, AvgDowntime > 0)
-
     # Sort the data in descending order of AvgDowntime (for descending order)
     aggregated_data <- aggregated_data[order(-aggregated_data$AvgDowntime), ]
-
-    # Check if there is data to plot
+    # Create funnel chart in Plotly
     if (nrow(aggregated_data) > 0) {
         plot_ly(aggregated_data,
-                y = ~Issue,
+                y = ~reorder(Issue, -AvgDowntime),
                 x = ~AvgDowntime,
-                type = 'bar',
-                orientation = 'h',
-                text = ~paste0(round(AvgDowntime, 2), " days"),
-                textposition = 'auto',
-                hoverinfo = 'text',
-                marker = list(color = '#48d1cc')
-        ) %>%
-        layout(title = "Average Downtime Duration by Issue Type",
-               xaxis = list(title = 'Average Downtime (Days)', tickformat = ',.2f'),
-               yaxis = list(title = 'Issue Type', automargin = TRUE),
-               showlegend = FALSE,
-               margin = list(t = 40, r = 25, b = 40, l = 100),
-               font = list(family = "Arial", size = 12)
+                type = 'funnel',
+                textinfo = "value+percent previous",
+                marker = list(color = '#48d1cc')) %>%
+        layout(
+            title = "Average Downtime Duration (Days) by Issue Type",
+            yaxis = list(title = "Issue Type", automargin = TRUE),
+            xaxis = list(title = "Average Downtime (Days)", tickformat = ',.2f'),
+            hoverlabel = list(bgcolor = '#48d1cc', font = list(color = 'white')),
+            plot_bgcolor = 'white',
+            paper_bgcolor = 'white',
+            font = list(family = "Arial")
         )
     } else {
         plot_ly() %>%
@@ -206,13 +196,20 @@ output$avgDowntimeByIssue <- renderPlotly({
         plot <- plot_ly(
           cause_data,
           x = ~Issue_Count,
-          y = ~fct_inorder(`Attributable Cause`),  # Ensures the plot follows the order of appearance which is arranged by count
-          type = 'bar',
-          orientation = 'h',
-          marker = list(color = ~Issue_Count, colorscale = 'Blues')  # Color can be adjusted as needed
+          y = ~fct_reorder(`Attributable Cause`, Issue_Count),  # Ensures the plot follows the order of appearance which is arranged by count
+          type = 'scatter',
+          mode = 'markers+lines',
+          marker = list(size = 10, color = "blue")  # Color can be adjusted as needed
+        ) %>%
+        add_text(
+          x = ~Issue_Count, 
+          y = ~`Attributable Cause`, 
+          text = ~paste(Issue_Count),  # Add the issue count next to each marker
+          textposition = 'middle right',  # Position text to the right of the marker
+          showlegend = FALSE
         ) %>%
         layout(
-          title = "Funnel Plot of Attributable Causes",
+          title = "Distribution of Attributable Causes of Issues",
           xaxis = list(title = 'Number of Issues'),
           yaxis = list(title = 'Attributable Cause'),
           margin = list(l = 150)  # Left margin, adjust as necessary to fit y-axis labels
