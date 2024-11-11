@@ -1,0 +1,343 @@
+/* CSS Style */
+/* Aligns the action button to the right */
+.header-left {
+  display: flex;
+  align-items: center; 
+  flex-grow: 1; 
+}
+
+.dashboard-header {
+  position: relative;
+}
+
+/* Additional padding to push sidebar items down */
+.sidebar-menu {
+  padding-top: 140px; 
+}
+
+.control-bar {
+  position: absolute;
+  right: 0; 
+  top: 50%; 
+  transform: translateY(-50%);
+}
+
+.control-button {
+  margin-right: 10px; 
+  background-color: #007bff;
+  color: white; ;
+}
+
+
+/* Change the background color of the main header */
+.main-header {
+  background-color: #ffffff !important;
+}
+
+/* Optional: change the text color if needed */
+.main-header .logo, .main-header .navbar .nav > li > a {
+  color: #ffffff !important;
+}
+
+/* Setting the font-family for the entire body and relevant components */
+body, .btn, .input, .selectize-input, .navbar, .sidebar, 
+.content-wrapper, .main-sidebar, .left-side, .main-footer, .control-sidebar, .right-side,
+h1, h2, h3, h4, h5, h6, .shiny-plot-output, .dataTable thead th {
+  font-family: 'Mulish', sans-serif !important;
+}
+
+/* Style for active menu item */
+body .main-sidebar .sidebar .sidebar-menu li.active > a {
+  background-color: #17a2b8 !important;
+  color: white !important;
+}
+
+/* Hover effects for non-active menu items */
+body .main-sidebar .sidebar .sidebar-menu li a:hover {
+  background-color: #96d1e8 !important;
+  color: white !important;
+}
+
+/* Custom styles for bs4Cards in controlbar to ensure max-width */
+.bs4-card-custom {
+  max-width: 100%;
+} 
+
+/* Set the background color of the sidebar */
+.main-sidebar {
+  background-color: #000000 !important;  /* Apply the desired color */
+  box-shadow: none !important;
+}
+
+/* custom_styles.css */
+.sidebar-footer {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  text-align: left;
+  padding-top: 320px;
+}
+
+.sidebar-footer img {
+  height: 100px;
+}
+
+/* Attempt to universally select and style the toggle button and any child elements */
+.main-header .navbar .sidebar-toggle, 
+.main-header .navbar .sidebar-toggle *, 
+.main-header .navbar .sidebar-toggle svg {
+    color: white !important;  /* Targets font icons and text */
+    fill: white !important;  /* Targets SVG icons specifically */
+}
+
+/* Style container to remove list style and position correctly */
+.header-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align items to the start of the container */
+  margin-left: 15px; /* Match the sidebar width */
+  margin-top: 5px;
+  position: relative; /* Ensure the container is positioned correctly */
+  width: 210px; /* Match the width of the sidebar-footer */
+  text-align: center; /* Center the title text */
+  padding: 5px 0; /* Add padding to give some space around the title */
+  background-color: #fff; /* Light background color to distinguish the title area */
+  border-radius: 8px; /* Optional: Add rounded corners for a modern look */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for a more professional look */
+  height: 19px;
+}
+
+/* Style for the header title */
+.header-title {
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #0137A6;
+  padding-left: 5px; /* Space after the vertical line */
+}
+
+/* General sidebar styling */
+.sidebar-panel {
+  margin-top: 0;
+  background-color: #ffffff;
+  border-right: 1px solid #dee2e6;
+  padding: 20px;
+  border-top: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  border-left: 1px solid #dee2e6;
+  position: fixed;
+  right: 10px;
+  overflow-y: auto;
+  width: 415px;
+}
+
+/* General sidebar styling */
+.container {
+  margin-top: 0;
+  background-color: #ffffff;
+  border-right: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  border-left: 1px solid #dee2e6;
+}
+
+
+
+/* Styling for action buttons */
+.action-button {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 5px;
+}
+
+.action-button:hover {
+  background-color: #e9ecef;
+}
+
+/* Styling for input fields and select elements */
+.input-field, .select-input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin-bottom: 7px;
+}
+
+/* Label styling */
+.label {
+  font-weight: bold;
+  margin-bottom: 3px;
+  display: block;
+}
+
+/* Tooltips styling */
+.tooltip {
+  background-color: #333;
+  color: #fff;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 10px;
+}
+
+/* Numeric inputs with icons */
+.numeric-input-icon {
+  display: flex;
+  align-items: center;
+}
+
+.numeric-input-icon input {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.numeric-input-icon .icon {
+  color: #666;
+}
+
+
+
+/* Custom cards and tabbox-------------------- ----------------------------------------------- */
+/* Custom styling for all boxes in the dashboard */
+/* Custom styling for box titles */
+.box-title {
+  background-color: white;  /* Light gray background for the title area */
+  color: #0137A6;  /* Dark gray text color */
+  padding: 10px 15px;  /* Padding around the text */
+  border-bottom: 1px solid white;  /* A subtle border line to separate from content */
+  border-top-left-radius: 6px;  /* Rounded corners at the top */
+  border-top-right-radius: 6px;
+  font-size: 18px;  /* Slightly larger font size for the title */
+  font-weight: bold;  /* Bold font weight for emphasis */
+  text-align: center;  /* Center-align the title text */
+  margin-bottom: 0;
+}
+
+
+.custom-box {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  padding: 20px; 
+  border-top: none; 
+  margin-top: -1px;
+  transition: box-shadow 0.3s ease-in-out; 
+}
+
+.custom-box:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Enhanced shadow on hover for better focus */
+}
+
+/* Styling for titles and content inside boxes */
+.custom-box h3 {
+  margin-top: 0;
+  color: #333; /* Darker text for better readability */
+  font-size: 24px; /* Larger font size for importance */
+  text-align: center; /* Center aligning the text */
+}
+
+/* Enhancements for the tab panels */
+.nav-tabs {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.nav-tabs > li > a {
+  background-color: #f8f9fa;
+  margin-right: 5px;
+  border: 1px solid transparent;
+  border-radius: 5px 5px 0 0;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.nav-tabs > li > a:hover {
+  border-color: #ddd;
+  background-color: #e9ecef;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-bottom-color: transparent;
+}
+
+/* Styling for the content of the tabs */
+.tab-content {
+  padding: 20px;
+  border: 1px solid #dee2e6;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+
+.footer{
+  background-color: #fff;
+  color: black;
+  text-align: center;
+  font-size: 10px;
+  padding: 0px;
+}
+
+
+.valuebox-title{
+  color: #0137A6; /* Change the color as needed */
+  font-size: 24px; /* Adjust the size as needed */
+}
+
+
+/* Custom styles for date range input */
+.shiny-date-range-input {
+  border: 1px solid #cccccc;  /* Sets a border around the date range input */
+  border-radius: 5px;         /* Rounds the corners of the border */
+  padding: 5px;               /* Adds padding inside the border */
+  background-color: #fff;  /* Sets a background color */
+}
+
+.shiny-date-range-input input {
+  border: 1px solid #aaaaaa;  /* Sets a border for each input box */
+  border-radius: 4px;         /* Rounds the corners of each input box */
+  padding: 3px 5px;           /* Sets padding inside each input box */
+}
+
+.shiny-date-range-input label {
+  font-weight: bold;          /* Makes the label text bold */
+  color: #333333;             /* Sets the label text color */
+  margin-bottom: 5px;         /* Adds space below the label */
+}
+
+.shiny-date-range-input .input-group-addon {
+  background-color: #e9ecef;  /* Changes the background color of the 'to' label */
+  border: none;               /* Removes border around the 'to' label */
+  color: #495057;             /* Sets color of the 'to' text */
+}
+
+.right-logo {
+  height: 50px;  /* Sets the height of the logo */
+  max-width: 100%; /* Ensure the logo scales within the container */
+  background-color: #ffffff; /* Optional: Add a background behind the logo */
+  border-radius: 8px; /* Optional: Add rounded corners for a modern look */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for a more professional look */
+  padding: 5px;
+}
+
+.rightUi {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  margin-right: 15px;
+}
+
+
+/* Change background color of box titles */
+.box-title {
+  background-color: #4CAF50; /* Change the hex color as needed */
+  color: white; /* Optional: Change the text color */
+}
+
