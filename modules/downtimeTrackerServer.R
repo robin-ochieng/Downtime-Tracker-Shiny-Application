@@ -64,7 +64,7 @@ downtimeTrackerServer <- function(id, data) {
   output$averageDowntimeDuration <- renderValueBox({
     valueBox(
       comma(averageDowntimeDuration(), accuracy = 1), 
-      subtitle = "Avg. Downtime (Days)",
+      subtitle = "Avg. Downtime (Hours)",
       color = "white"
     )
   })
@@ -80,6 +80,48 @@ downtimeTrackerServer <- function(id, data) {
 
 
 # The plots-------------------------------------------------------------------------------------------------------------
+    output$Issues_over_time <- renderPlotly({
+      data <- filtered_data() %>%
+        mutate(Date = as.Date(Date)) %>%
+        group_by(Date) %>%
+        dplyr::summarize(IssuesCount = n()) %>%  # Count of sales per day
+        arrange(Date)
+      
+      plot_ly(data, x = ~Date, y = ~IssuesCount, type = 'scatter', mode = 'lines+markers',
+              line = list(color = '#1CA4F8'), marker = list(color = '#0d6efd')) %>%
+        layout(
+          title = "Issues Count Over Time",
+          xaxis = list(title = "Date", tickfont = list(size = 10, color = "#333333")),
+          yaxis = list(title = "Count of Issues", tickfont = list(size = 10, color = "#333333")),
+          font = list(family = "Mulish", color = "#333333"),
+          plot_bgcolor = "white",
+          paper_bgcolor = "white"
+        )
+    })
+
+
+    output$averageResolutionTimeOverTime <- renderPlotly({
+      data <- filtered_data() %>%
+        mutate(Date = as.Date(Date)) %>%
+        group_by(Date) %>%
+        dplyr::summarize(avgResTime = mean(`Downtime (Resolution Time)`)) %>%  # Count of sales per day
+        arrange(Date)
+      
+      plot_ly(data, x = ~Date, y = ~avgResTime, type = 'scatter', mode = 'lines+markers',
+              line = list(color = '#1CA4F8'), marker = list(color = '#0d6efd')) %>%
+        layout(
+          title = "Average Downtime Over Time (Hours)",
+          xaxis = list(title = "Date", tickfont = list(size = 10, color = "#333333")),
+          yaxis = list(title = "Average Downtime", tickfont = list(size = 10, color = "#333333")),
+          font = list(family = "Mulish", color = "#333333"),
+          plot_bgcolor = "white",
+          paper_bgcolor = "white"
+        )
+    })
+ 
+ 
+ 
+ 
     custom_colors_status <- c("#5f9ea0", "#0000cd")  # Blue for resolved, red for unresolved
     output$statusBreakdown <- renderPlotly({
       data <- filtered_data()  # Load the necessary issues data
@@ -161,10 +203,10 @@ output$avgDowntimeByIssue <- renderPlotly({
                 y = ~reorder(Issue, -AvgDowntime),
                 x = ~AvgDowntime,
                 type = 'funnel',
-                textinfo = "value+percent previous",
+                textinfo = "value+percent",
                 marker = list(color = '#48d1cc')) %>%
         layout(
-            title = "Average Downtime Duration (Days) by Issue Type",
+            title = "Average Downtime Duration (Hours) by Issue Type",
             yaxis = list(title = "Issue Type", automargin = TRUE),
             xaxis = list(title = "Average Downtime (Days)", tickformat = ',.2f'),
             hoverlabel = list(bgcolor = '#48d1cc', font = list(color = 'white')),
@@ -181,41 +223,37 @@ output$avgDowntimeByIssue <- renderPlotly({
 })
 
 
-    output$funnelPlot <- renderPlotly({
-        # Assume data is obtained via a reactive expression or similar
-        req(filtered_data())
-        data <- filtered_data()
+output$funnelPlot <- renderPlotly({
+    req(filtered_data())
+    data <- filtered_data()
 
-        # Aggregate to find count of issues by attributable cause
-        cause_data <- data %>%
-          group_by(`Attributable Cause`) %>%
-          dplyr::summarise(Issue_Count = n(), .groups = 'drop') %>%
-          arrange(desc(Issue_Count))  # Arrange might be unnecessary for a funnel plot but helps ordering
+    # Aggregate to find count of issues by attributable cause
+    cause_data <- data %>%
+      group_by(`Attributable Cause`) %>%
+      dplyr::summarise(Issue_Count = n(), .groups = 'drop') %>%
+      arrange(desc(Issue_Count))  # Sort in descending order for better visual impact
 
-        # Creating the funnel plot
-        plot <- plot_ly(
-          cause_data,
-          x = ~Issue_Count,
-          y = ~fct_reorder(`Attributable Cause`, Issue_Count),  # Ensures the plot follows the order of appearance which is arranged by count
-          type = 'scatter',
-          mode = 'markers+lines',
-          marker = list(size = 10, color = "blue")  # Color can be adjusted as needed
-        ) %>%
-        add_text(
-          x = ~Issue_Count, 
-          y = ~`Attributable Cause`, 
-          text = ~paste(Issue_Count),  # Add the issue count next to each marker
-          textposition = 'middle right',  # Position text to the right of the marker
-          showlegend = FALSE
-        ) %>%
-        layout(
-          title = "Distribution of Attributable Causes of Issues",
-          xaxis = list(title = 'Number of Issues'),
-          yaxis = list(title = 'Attributable Cause'),
-          margin = list(l = 150)  # Left margin, adjust as necessary to fit y-axis labels
-        )
-        plot
-    })
+    # Creating the bar chart with text labels on top
+    plot <- plot_ly(
+      cause_data,
+      x = ~`Attributable Cause`,
+      y = ~Issue_Count,
+      type = 'bar',
+      marker = list(color = 'blue'),  # Adjust color as needed
+      text = ~Issue_Count,  # Text to display (Issue Count)
+      textposition = 'outside',  # Position text outside of the bar
+      hoverinfo = 'text',  # Show text on hover
+      texttemplate = '%{text}'  # Custom template to show only the text
+    ) %>%
+    layout(
+      title = "Distribution of Attributable Causes of Issues",
+      xaxis = list(title = 'Attributable Cause'),
+      yaxis = list(title = 'Number of Issues'),
+      margin = list(l = 150, b = 100)  # Adjust margins to fit labels
+    )
+    plot
+})
+
 
 
 
