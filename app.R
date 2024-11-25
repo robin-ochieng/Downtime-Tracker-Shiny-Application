@@ -13,6 +13,7 @@ library(readxl)
 library(writexl)
 library(janitor)
 library(plyr)
+library(dplyr)
 library(tidyquant)
 library(lubridate)
 library(toOrdinal)
@@ -48,7 +49,7 @@ my_theme <- bs_theme(
 )
 
 ui <- bs4DashPage(
-  title = "Downtime Tracker",
+  title = "IBS Tracker",
   dark = NULL,
   help = NULL,
   fullscreen = FALSE,
@@ -60,7 +61,7 @@ ui <- bs4DashPage(
     title = dashboardBrand(
       title = tags$li(
         class = "text-center header-title-container",  # Added a new class for more specific styling
-        tags$h4("Downtime Tracker", class = "header-title")
+        tags$h4("IBS Tracker", class = "header-title")
       ),
       color = "white",
       image = NULL  
