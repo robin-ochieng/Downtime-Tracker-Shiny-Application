@@ -98,9 +98,9 @@ body .main-sidebar .sidebar .sidebar-menu li a:hover {
   margin-left: 15px; /* Match the sidebar width */
   margin-top: 5px;
   position: relative; /* Ensure the container is positioned correctly */
-  width: 210px; /* Match the width of the sidebar-footer */
+  width: 150px; /* Match the width of the sidebar-footer */
   text-align: center; /* Center the title text */
-  padding: 5px 0; /* Add padding to give some space around the title */
+  padding: 10px; /* Add padding to give some space around the title */
   background-color: #fff; /* Light background color to distinguish the title area */
   border-radius: 8px; /* Optional: Add rounded corners for a modern look */
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for a more professional look */
@@ -127,7 +127,7 @@ body .main-sidebar .sidebar .sidebar-menu li a:hover {
   border-left: 1px solid #dee2e6;
   position: fixed;
   right: 10px;
-  overflow-y: auto;
+  overflow-y: visible;
   width: 415px;
 }
 
