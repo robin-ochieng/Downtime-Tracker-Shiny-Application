@@ -254,6 +254,36 @@ output$funnelPlot <- renderPlotly({
     plot
 })
 
+output$distributionOfdiscoveries <- renderPlotly({
+    req(filtered_data())
+    data <- filtered_data()
+
+    # Aggregate to find count of issues by attributable cause
+    cause_data <- data %>%
+      group_by(Discovered_by) %>%
+      dplyr::summarise(discoveree_Count = n(), .groups = 'drop') %>%
+      arrange(desc(discoveree_Count))  # Sort in descending order for better visual impact
+
+    # Creating the bar chart with text labels on top
+    plot <- plot_ly(
+      cause_data,
+      x = ~Discovered_by,
+      y = ~discoveree_Count,
+      type = 'bar',
+      marker = list(color = 'blue'),  
+      text = ~discoveree_Count,  
+      textposition = 'outside',  
+      hoverinfo = 'text', 
+      texttemplate = '%{text}'  
+    ) %>%
+    layout(
+      title = "Distribution of Discoverees of Issues",
+      xaxis = list(title = 'Issue Discoveree'),
+      yaxis = list(title = 'Number of Issues'),
+      margin = list(l = 150, b = 100)  # Adjust margins to fit labels
+    )
+    plot
+})
 
 
 
