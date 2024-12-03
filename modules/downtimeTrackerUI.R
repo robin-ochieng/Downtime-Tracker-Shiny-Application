@@ -77,7 +77,17 @@ downtimeTrackerUI <- function(id) {
         height = "500px",
         plotlyOutput(ns("distributionOfIssues")) %>% withSpinner(type = 6)
       )
-    )  
+    ),
+    fluidRow(
+      box(
+        title = "Who Discovered the Issues?",
+        status = "white",
+        solidHeader = TRUE,
+        width = 12,
+        height = "500px",
+        plotlyOutput(ns("distributionOfdiscoveries")) %>% withSpinner(type = 6)
+      )
+    ), 
     )
       )
     )
